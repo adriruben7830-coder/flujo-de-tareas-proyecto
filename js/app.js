@@ -1,6 +1,6 @@
 // ============================================
 // APP.JS - Lógica principal de TaskMaster
-// Práctica 3: JavaScript + DOM + LocalStorage
+// Práctica 3 y 4: JavaScript + DOM + LocalStorage + Tailwind + Modo oscuro
 // ============================================
 
 // --- 1. SELECCIONAMOS LOS ELEMENTOS DEL HTML ---
@@ -11,14 +11,36 @@ const taskList = document.getElementById('taskList');
 const totalCounter = document.getElementById('total');
 const searchInput = document.getElementById('searchInput');
 const menuLinks = document.querySelectorAll('aside a');
+const darkToggle = document.getElementById('darkToggle');
 
-// --- 2. CARGAMOS LAS TAREAS AL INICIAR LA PÁGINA ---
+// --- 2. MODO OSCURO ---
+// Comprobamos si el usuario ya tenía el modo oscuro activado la última vez
+if (localStorage.getItem('modoOscuro') === 'true') {
+    document.documentElement.classList.add('dark');
+    darkToggle.textContent = '☀️ Modo claro';
+}
+
+// Cuando el usuario pulsa el botón, alternamos el modo oscuro
+darkToggle.addEventListener('click', function() {
+    document.documentElement.classList.toggle('dark');
+
+    // Comprobamos si ahora está en modo oscuro o no
+    const estaOscuro = document.documentElement.classList.contains('dark');
+
+    // Cambiamos el texto del botón según el modo
+    darkToggle.textContent = estaOscuro ? '☀️ Modo claro' : '🌙 Modo oscuro';
+
+    // Guardamos la preferencia del usuario para que se recuerde al recargar
+    localStorage.setItem('modoOscuro', estaOscuro);
+});
+
+// --- 3. CARGAMOS LAS TAREAS AL INICIAR ---
 let tareas = cargarTareasDeStorage();
 let filtroActual = 'all';
 renderizarTodas(tareas);
 actualizarContador();
 
-// --- 3. EVENTO: AÑADIR TAREA ---
+// --- 4. EVENTO: AÑADIR TAREA ---
 taskForm.addEventListener('submit', function(e) {
     e.preventDefault();
 
@@ -39,11 +61,10 @@ taskForm.addEventListener('submit', function(e) {
     taskInput.value = '';
 });
 
-// --- 4. FUNCIÓN: RENDERIZAR TAREAS ---
+// --- 5. FUNCIÓN: RENDERIZAR TAREAS ---
 function renderizarTodas(listaDeTareas) {
     taskList.innerHTML = '';
 
-    // Filtramos según el menú activo
     const tareasFiltradas = listaDeTareas.filter(function(tarea) {
         if (filtroActual === 'all') return true;
         if (filtroActual === 'completed') return tarea.completada;
@@ -60,17 +81,15 @@ function renderizarTodas(listaDeTareas) {
     });
 }
 
-// --- 5. FUNCIÓN: CREAR TARJETA DE TAREA EN EL DOM ---
+// --- 6. FUNCIÓN: CREAR TARJETA DE TAREA ---
 function crearElementoTarea(tarea) {
 
-    // Etiquetas de prioridad
     const prioridadTexto = {
         high: 'Alta',
         medium: 'Media',
         low: 'Baja'
     };
 
-    // Creamos la tarjeta con el mismo estilo que las prácticas anteriores
     const article = document.createElement('article');
     article.classList.add('task-card', tarea.prioridad);
     if (tarea.completada) article.classList.add('completed');
@@ -89,7 +108,7 @@ function crearElementoTarea(tarea) {
         </div>
     `;
 
-    // --- EVENTO: COMPLETAR ---
+    // EVENTO: COMPLETAR
     article.querySelector('.btn-completar').addEventListener('click', function() {
         tarea.completada = !tarea.completada;
         guardarEnStorage(tareas);
@@ -97,7 +116,7 @@ function crearElementoTarea(tarea) {
         actualizarContador();
     });
 
-    // --- EVENTO: ELIMINAR ---
+    // EVENTO: ELIMINAR
     article.querySelector('.btn-eliminar').addEventListener('click', function() {
         tareas = tareas.filter(t => t.id !== tarea.id);
         guardarEnStorage(tareas);
@@ -108,40 +127,36 @@ function crearElementoTarea(tarea) {
     taskList.appendChild(article);
 }
 
-// --- 6. GUARDAR EN LOCALSTORAGE ---
+// --- 7. GUARDAR EN LOCALSTORAGE ---
 function guardarEnStorage(listaDeTareas) {
     localStorage.setItem('tareas', JSON.stringify(listaDeTareas));
 }
 
-// --- 7. CARGAR DESDE LOCALSTORAGE ---
+// --- 8. CARGAR DESDE LOCALSTORAGE ---
 function cargarTareasDeStorage() {
     const datos = localStorage.getItem('tareas');
     return datos ? JSON.parse(datos) : [];
 }
 
-// --- 8. ACTUALIZAR CONTADORES ---
+// --- 9. ACTUALIZAR CONTADORES ---
 function actualizarContador() {
     const completadas = tareas.filter(t => t.completada).length;
     totalCounter.textContent = tareas.length;
     document.getElementById('done').textContent = completadas;
 }
 
-// --- 9. FILTROS DEL MENÚ ---
+// --- 10. FILTROS DEL MENÚ ---
 menuLinks.forEach(function(link) {
     link.addEventListener('click', function(e) {
         e.preventDefault();
-
-        // Quitar active de todos
         menuLinks.forEach(l => l.classList.remove('active'));
         this.classList.add('active');
-
-        // Aplicar filtro
         filtroActual = this.dataset.filter;
         renderizarTodas(tareas);
     });
 });
 
-// --- 10. BONUS: BUSCADOR EN TIEMPO REAL ---
+// --- 11. BUSCADOR EN TIEMPO REAL ---
 searchInput.addEventListener('input', function() {
     const textoBusqueda = searchInput.value.toLowerCase();
     const tarjetas = taskList.querySelectorAll('.task-card');

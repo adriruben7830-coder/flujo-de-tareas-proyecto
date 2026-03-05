@@ -1,4 +1,4 @@
-/* VARIABLES CSS - El "panel de control" de nuestros estilos */
+/* VARIABLES CSS */
 :root {
     --color-primary: #6366f1;
     --color-primary-dark: #4f46e5;
@@ -43,7 +43,7 @@ body {
     display: grid;
     grid-template-columns: 250px 1fr;
     grid-template-rows: auto 1fr;
-    grid-template-areas: 
+    grid-template-areas:
         "header header"
         "aside main";
 }
@@ -51,15 +51,6 @@ body {
 /* HEADER */
 header {
     grid-area: header;
-    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-    color: var(--text-white);
-    padding: var(--space-md) var(--space-xl);
-    text-align: center;
-}
-
-header h1 {
-    font-size: var(--font-size-xl);
-    margin-bottom: var(--space-xs);
 }
 
 /* ASIDE */
@@ -125,7 +116,7 @@ main {
     overflow-y: auto;
 }
 
-/* FORMULARIO NUEVA TAREA */
+/* FORMULARIO */
 .add-task-form {
     background: var(--bg-card);
     border-radius: var(--radius);
@@ -144,6 +135,7 @@ main {
     gap: var(--space-sm);
     flex-wrap: wrap;
     margin-bottom: var(--space-sm);
+    align-items: center;
 }
 
 #taskInput {
@@ -155,6 +147,8 @@ main {
     font-size: var(--font-size-base);
     outline: none;
     transition: border-color 0.3s;
+    color: var(--text-dark);
+    background-color: white;
 }
 
 #taskInput:focus {
@@ -168,6 +162,9 @@ main {
     font-size: var(--font-size-base);
     cursor: pointer;
     outline: none;
+    min-width: 180px;
+    color: var(--text-dark);
+    background-color: white;
 }
 
 #taskForm button[type="submit"] {
@@ -180,6 +177,7 @@ main {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
+    white-space: nowrap;
 }
 
 #taskForm button[type="submit"]:hover {
@@ -196,13 +194,15 @@ main {
     margin-top: var(--space-xs);
     outline: none;
     transition: border-color 0.3s;
+    color: var(--text-dark);
+    background-color: white;
 }
 
 #searchInput:focus {
     border-color: var(--color-primary);
 }
 
-/* TARJETAS DE TAREAS */
+/* TARJETAS */
 .task-list h2 {
     margin-bottom: var(--space-lg);
     font-size: var(--font-size-xl);
@@ -227,6 +227,7 @@ main {
 .task-card.high  { border-left-color: var(--color-high); }
 .task-card.medium { border-left-color: var(--color-medium); }
 .task-card.low   { border-left-color: var(--color-low); }
+
 .task-card.completed {
     border-left-color: var(--color-done);
     opacity: 0.7;
@@ -263,7 +264,7 @@ main {
 .badge.low    { background-color: var(--color-low); }
 .badge.done   { background-color: var(--color-done); }
 
-/* BOTONES DE ACCIÓN EN CADA TAREA */
+/* BOTONES DE ACCIÓN */
 .task-actions {
     display: flex;
     gap: var(--space-xs);
@@ -304,11 +305,37 @@ main {
     transform: translateY(-1px);
 }
 
+/* MODO OSCURO */
+.dark .task-card {
+    background-color: #1f2937;
+    color: white;
+}
+
+.dark .task-header h3 {
+    color: white;
+}
+
+.dark .add-task-form {
+    background-color: #1f2937;
+}
+
+.dark #taskInput,
+.dark #prioritySelect,
+.dark #searchInput {
+    background-color: #374151;
+    color: white;
+    border-color: #4b5563;
+}
+
+.dark .task-list h2 {
+    color: white;
+}
+
 /* RESPONSIVE */
 @media (max-width: 768px) {
     body {
         grid-template-columns: 1fr;
-        grid-template-areas: 
+        grid-template-areas:
             "header"
             "aside"
             "main";
