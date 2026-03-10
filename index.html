@@ -68,6 +68,12 @@
                 placeholder="🔍 Buscar tareas..."
                 class="focus:ring-2 focus:ring-indigo-400 focus:outline-none transition-all duration-300 dark:bg-gray-700 dark:text-white dark:border-gray-600"
             />
+            
+            <button onclick="document.getElementById('searchInput').value=''; renderizarTodas(tareas)" 
+                style="margin-top:0.5rem; padding:4px 12px; background:#6366f1; color:white; border:none; border-radius:8px; cursor:pointer;">
+                ✖ Limpiar búsqueda
+            </button>
+        </section>
         </section>
 
         <!-- LISTA DE TAREAS -->
@@ -83,7 +89,7 @@
             🗑️ Borrar completadas
         </button>
     </div>
-
+<p id="contadorFiltro" style="color:#6b7280; margin-bottom:1rem;"></p>
     <div id="taskList"></div>
 </section>
     </main>

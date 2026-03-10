@@ -275,4 +275,5 @@ function ordenarPorprioridad(tareas) {
     };
     return tareas.sort(function(a, b) {
         return orden[a.prioridad] - orden[b.prioridad];
-    };
+    });
+}
